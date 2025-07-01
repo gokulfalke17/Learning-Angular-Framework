@@ -1,0 +1,375 @@
+/*
+ 
+=======================> Angular All Basics Used <=========================
+
+1. What is Angular?
+Angular is Google’s TypeScript-based framework for building modern single-page applications
+(SPAs) and large enterprise sites.
+
+It gives you a complete tool-chain (compiler, CLI, testing, build, routing, forms, i18n)
+so you don’t have to wire lots of libraries together yourself.
+
+ 
+2. Why teams pick Angular
+ 
+| Benefit              | What it means in simple words                                                                                              |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **CLI-driven**       | `ng new`, `ng generate`, `ng test` and `ng build` handle scaffolding, unit tests, and production builds for you.           |
+| **Opinionated**      | Clear folder structure, code style and best practices baked-in → easier to onboard to new projects.                        |
+| **Code re-use**      | Shared components, services and modules scale well across many apps.                                                       |
+| **Built-in testing** | Karma/Jasmine unit tests & Protractor/Cypress e2e out of the box.                                                          |
+| **Strong typing**    | TypeScript catches many bugs in the editor before they reach the browser.                                                  |
+| **High performance** | Ahead-of-Time (AoT) compilation, tree-shaking, differential loading, and now partial hydration keep bundles lean and fast. |
+
+ 
+ 3. Angular vs React
+
+| Topic                           | **Angular**               | **React**                                  |
+| ------------------------------- | ------------------------- | ------------------------------------------ |
+| Nature                          | Full framework            | UI library                                 |
+| CLI                             | Built-in (`@angular/cli`) | Separate tools (Vite, CRA, Next, etc.)     |
+| Packages needed for a small app | All included              | You add router, forms, state mgmt, testing |
+| Code style                      | Opinionated               | Freedom of choice                          |
+| Learning curve                  | Steeper at first          | Gentler start, but you compose libs later  |
+
+ 
+ 
+ 4. Myths debunked
+“Angular is hard to learn.”
+It is larger, but the CLI scaffolds files, and the docs are example-driven.
+
+“Every update is a breaking change.”
+Major releases every 6 months follow strict deprecation timelines; the ng update command 
+auto-migrates most code.
+
+“Angular apps are slow and huge.”
+Modern builds use AoT, ESBuild, lazy-loaded routes, and fine-grained change detection. 
+Production bundles are comparable to React/Vue.
+
+
+
+5. Core building blocks
+| Block           | One-liner                                                                |
+| --------------- | ------------------------------------------------------------------------ |
+| **Component**   | View + logic class + CSS scoped together.                                |
+| **Template**    | HTML with Angular syntax (`*ngIf`, `{{}}`, pipes).                       |
+| **Module**      | Logical container that groups components and services.                   |
+| **Service**     | Reusable class providing data or logic; injected as a *singleton* by DI. |
+| **Directive**   | Adds behaviour to DOM (attribute) or reshapes it (structural).           |
+| **Pipe**        | Formats data in a template (dates, currency, custom filters).            |
+| **Router**      | Maps URLs to components; supports guards and lazy loading.               |
+| **Forms**       | Template-driven (simple) or Reactive (scalable).                         |
+| **HTTP Client** | Wrapper around `fetch` with observables and interceptors.                |
+| **Animations**  | Declarative API on top of Web Animations.                                |
+| **Testing**     | Karma/Jasmine for unit tests; Cypress/Playwright common for e2e.         |
+
+
+
+6. Data-binding cheat-sheet
+
+<!-- 1-way, view ← component -->
+<h3>{{ title }}</h3>
+<img [src]="photoUrl">
+
+<!-- 1-way, view → component (event) -->
+<button (click)="like()">Like</button>
+
+<!-- 2-way (needs FormsModule) -->
+<input [(ngModel)]="username">
+
+
+@Input() – pass data down to a child.
+@Output() – emit events up with EventEmitter.
+
+
+
+7. Quick event listener example
+
+<input type="text" (keyup)="onKey($event)">
+
+export class MyComponent {
+  onKey(event: KeyboardEvent) {
+    console.log('User typed:', (event.target as HTMLInputElement).value);
+  }
+}
+
+
+8. Tiny counter component
+
+@Component({
+  selector: 'app-counter',
+  template: `
+    <button (click)="dec()">–</button>
+    <span>{{ count }}</span>
+    <button (click)="inc()">+</button>
+  `,
+  standalone: true   <!-- Angular 17+ feature -->
+})
+export class CounterComponent {
+  count = 0;
+  inc() { this.count++; }
+  dec() { this.count--; }
+}
+
+
+9. Routing essentials (incl. lazy loading)
+
+const routes: Routes = [
+  { path: '', component: HomeComponent },
+  {
+    path: 'todos',
+    loadChildren: () =>
+      import('./todos/todos.routes').then(m => m.TodosRoutes)
+  }
+];
+
+
+router-outlet acts like a placeholder in the main template.
+Lazy modules are downloaded only when first visited, boosting first-load speed.
+
+
+
+10. Services, DI & HTTP calls
+
+@Injectable({ providedIn: 'root' })
+export class TodoService {
+  constructor(private http: HttpClient) {}
+
+  getTodos() {
+    return this.http.get<Todo[]>('/api/todos');
+  }
+}
+
+providedIn: 'root' → singleton.
+Interceptors can add auth tokens, show loaders, or log requests globally.
+
+
+
+11. Directives in depth
+
+| Type           | Role                        | Example                         |
+| -------------- | --------------------------- | ------------------------------- |
+| **Component**  | Template + logic            | `<app-header>`                  |
+| **Attribute**  | Change appearance/behaviour | `appHighlight` to set bg colour |
+| **Structural** | Add/remove DOM              | `*ngFor`, `*ngIf`, `*ngSwitch`  |
+
+
+@Directive({ selector: '[appHighlight]' })
+export class HighlightDirective {
+  @HostListener('mouseenter') hover() {
+    this.el.nativeElement.style.background = 'yellow';
+  }
+  @HostListener('mouseleave') leave() {
+    this.el.nativeElement.style.background = null;
+  }
+  constructor(private el: ElementRef) {}
+}
+
+
+
+12. Pipes
+
+
+Built-in: date, currency, percent, uppercase, lowercase, json, async, etc.
+Custom pipe (filters done-todos):
+
+@Pipe({ name: 'done' })
+export class DonePipe implements PipeTransform {
+  transform(todos: Todo[]) {
+    return todos.filter(t => t.completed);
+  }
+}
+
+
+<li *ngFor="let t of todos | done">{{ t.title }}</li>
+
+
+
+13. Angular CLI superpowers
+
+ng new my-app --standalone – scaffold project (standalone API default).
+
+ng generate component login – produce files with test stubs.
+
+ng test & ng e2e – run unit and e2e suites.
+
+ng build --prod – AoT, minify, fingerprint assets.
+
+
+
+14. Performance & best practices
+
+Lazy-load routes and defer images.
+
+Use trackBy on *ngFor.
+
+Prefer OnPush change detection or signals (Angular 17+) where possible.
+
+Standalone components & signals reduce NgModules overhead.
+
+Keep third-party bundles out of the main chunk; load them on demand.
+
+
+15. Testing snapshot
+
+| Layer | Tool (default)       | What to test                                  |
+| ----- | -------------------- | --------------------------------------------- |
+| Unit  | Jasmine + Karma      | Pure functions, component class logic, pipes. |
+| DOM   | TestBed + Jasmine    | Template bindings, directive behaviour.       |
+| e2e   | Cypress / Playwright | Critical user journeys (login, checkout).     |
+
+
+
+16. Building for production
+
+ng build --configuration production
+
+Generates AoT + minified bundles in /dist.
+
+Use ng deploy (with e.g. Firebase, GitHub Pages, Netlify) or embed into a Spring Boot JAR, 
+Docker image, etc.
+
+
+17. Extras you’ll eventually meet
+
+RxJS Observables – Angular’s async backbone (HTTP, router, forms emit values).
+
+State management – NgRx, NGXS, Akita, or simple signals can centralise app state.
+
+Internationalisation (i18n) – built-in extraction and compile-time localisation.
+
+SSR & hydration – @angular/ssr renders HTML on the server; Angular 18 adds partial hydration for faster startup. 
+infoworld.com
+
+Material 3 – Angular Material updated to Google’s latest design spec and stabilised in v18.
+
+
+
+18. Keeping up to date
+
+
+Release cadence: two major versions per year, each supported for 18 months.
+
+Run ng update and read the official Update Guide when upgrading between majors.
+
+The Angular team announces RFCs and beta features early – trying them helps shape 
+the framework’s future.
+
+
+
+==================================================================================================
+
+
+1. Create a New Angular App (Standalone)
+
+ng new todo-app --standalone
+cd todo-app
+
+Adds standalone: true support from Angular 17 onwards.
+If you want module-based setup (older style):
+
+ng new todo-app
+
+
+2. Generate App Structure
+
+ng generate component components/header --standalone
+ng generate component components/counter --standalone
+ng generate component components/greeting --standalone
+ng generate component components/todos --standalone
+ng generate component components/todos-item --standalone
+ng generate component pages/home --standalone
+
+--standalone is optional if using module-based structure.
+
+Services
+
+ng generate service services/todos
+Models (manually create)
+Create manually:
+
+
+mkdir src/app/models
+touch src/app/models/todo.model.ts
+
+Inside todo.model.ts:
+
+export interface Todo {
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+Pipes
+ng generate pipe pipes/done
+Example use: filter completed todos.
+
+Directives
+ng generate directive directives/highlight
+Adds custom behavior like highlighting.
+
+3. Add Routing (if not already)
+If not added during ng new, you can manually add it:
+
+ng generate module app-routing --flat --module=app
+Inside app-routing.module.ts:
+
+const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'todos', component: TodosComponent },
+];
+
+4. Build and Serve the App
+
+ng serve
+5. Extra Useful Angular CLI Commands
+Purpose	Command
+Rebuild + Serve	ng serve or ng s
+Run Tests	ng test
+End-to-End Tests	ng e2e
+Build for Production	ng build --configuration production
+Add Angular Material	ng add @angular/material
+Deploy to Firebase	ng add @angular/fire
+
+ 6. Optional: Create a Module to Group Components (If NOT using standalone)
+
+ng generate module features/todos
+Then move todos, todos-item, etc. into that module.
+
+7. Folder Structure Suggestion
+arduino
+Copy
+Edit
+src/
+└── app/
+    ├── components/
+    │   ├── header/
+    │   ├── counter/
+    │   ├── greeting/
+    │   ├── todos/
+    │   └── todos-item/
+    ├── directives/
+    ├── pipes/
+    ├── pages/
+    │   └── home/
+    ├── services/
+    ├── models/
+    ├── app.component.ts
+    └── app-routing.module.ts
+    
+If you want, I can also give you full code templates for each of these generated items like:
+
+TodosService.ts
+
+TodoItemComponent.ts
+
+HeaderComponent.ts
+
+CustomPipe.ts
+
+HighlightDirective.ts
+
+
+
+ 
+ */
