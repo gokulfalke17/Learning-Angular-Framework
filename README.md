@@ -1,5 +1,533 @@
-Angular Q | A 
-==============
+
+
+
+/*
+
+ ***Angular***
+ ==============
+
+
+1. What is Angular?
+
+Angular is a web application framework built by Google.
+It allows you to build Single Page Applications (SPAs) using TypeScript, components, services, etc.
+It handles data binding, dependency injection, routing, and more, so you don’t reinvent common tasks.
+
+
+
+
+2. What is Angular CLI?
+
+Angular CLI is a command-line tool to help create and manage Angular projects.
+You use commands like ng new, ng serve, ng generate component, ng build.
+It sets up boilerplate, configuration, and build pipeline for you.
+
+
+
+
+3. Advantages of Angular
+
+Structured & opinionated framework — gives you clear ways to build apps.
+Two-way data binding, dependency injection, modular architecture speed up development.
+Strong community, tooling (CLI, testing), and maintainability for large apps.
+
+4. Hooks in Angular
+
+Lifecycle hooks are special methods that Angular calls at specific times in the life of a component or directive.
+They let you run custom logic when a component is created, updated, or destroyed.
+
+1. ngOnChanges(changes: SimpleChanges)
+
+When it runs: Called before ngOnInit and whenever an @Input() property value changes.
+Use case: React when parent sends new data to child.
+Example:
+
+ngOnChanges(changes: SimpleChanges) {
+  console.log('Input property changed:', changes);
+}
+
+
+2. ngOnInit()
+
+When it runs: Once after first ngOnChanges. Called only once in component’s life.
+Use case: Initialize data, call APIs, set up values.
+Example:
+
+ngOnInit() {
+  console.log('Component initialized');
+}
+
+
+3. ngDoCheck()
+
+When it runs: Every change detection cycle. Runs often, more than ngOnChanges.
+Use case: Detect and act on changes that Angular doesn’t catch with @Input().
+Example:
+
+ngDoCheck() {
+  console.log('Change detection cycle running');
+}
+
+4. ngAfterContentInit()
+
+When it runs: Called once after Angular inserts external content (<ng-content>) into component.
+Use case: Run logic after projected content is ready.
+Example:
+
+ngAfterContentInit() {
+  console.log('ng-content projected');
+}
+
+
+5. ngAfterContentChecked()
+
+When it runs: After every change detection cycle on projected content.
+Use case: Respond to updates in projected content.
+Example:
+
+ngAfterContentChecked() {
+  console.log('Projected content checked');
+}
+
+
+6. ngAfterViewInit()
+
+When it runs: Called once after component’s view (child components & template) is initialized.
+Use case: Access @ViewChild() or DOM elements safely.
+Example:
+
+ngAfterViewInit() {
+  console.log('Component view initialized');
+}
+
+
+7. ngAfterViewChecked()
+
+When it runs: After every change detection cycle of the component’s view.
+Use case: Respond when view updates (but avoid performance-heavy logic here).
+Example:
+
+ngAfterViewChecked() {
+  console.log('Component view checked');
+}
+
+
+8. ngOnDestroy()
+
+When it runs: Just before Angular destroys the component.
+Use case: Clean up subscriptions, intervals, or event listeners to avoid memory leaks.
+Example:
+
+ngOnDestroy() {
+  console.log('Component destroyed');
+}
+
+Full Lifecycle Flow Order :
+When a component is created → destroyed, hooks fire in this order:
+ngOnChanges (when @Input changes)
+ngOnInit (once)
+ngDoCheck (every change detection)
+ngAfterContentInit (once)
+ngAfterContentChecked (after every content check)
+ngAfterViewInit (once)
+ngAfterViewChecked (after every view check)
+ngOnDestroy (before component removed)
+
+
+Init hooks: ngOnInit, ngAfterContentInit, ngAfterViewInit
+Check hooks: ngDoCheck, ngAfterContentChecked, ngAfterViewChecked
+Destroy hook: ngOnDestroy
+
+
+
+5. What is the latest version of Angular?
+
+As of now, the latest stable Angular version is Angular 20 (released May 2025) 
+Prior versions include v19, v18, etc. 
+You can check using ng version or look at the Angular releases page.
+
+
+
+6. New Features in Angular 17
+
+Introduces control flow syntax in templates (@if, @for, @switch) to simplify template logic 
+Adds deferrable views (@defer blocks) to defer loading of parts of template to reduce bundle size 
+Improvements in SSR/hydration, better performance, and tighter integration of new features like signals 
+
+
+
+7. Difference between ng serve & ng start
+
+Actually, ng start is not a standard Angular CLI command (typo/mistake); the correct commands are ng serve and ng start may be alias in some setups.
+ng serve compiles the app in memory and serves it locally (development server).
+If ng start exists in some projects, it generally is alias or wrapper for ng serve (via npm scripts).
+
+
+
+
+8. What is a Component in Angular & its types
+
+A component is a building block of an Angular app, composed of HTML, TypeScript logic, and CSS.
+It encapsulates view, behavior, and data for a part of UI (for example, a button, form, list).
+Types: standalone component, routed component, dumb/presentational, container/smart components, etc.
+
+
+
+9. What is Standalone Component
+
+Standalone components don’t need to be declared inside an NgModule.
+You use @Component({ standalone: true, ... }).
+They simplify module structure and reduce boilerplate.
+
+
+
+
+10. What is Module (NgModule)
+
+A module groups related parts of the app: components, directives, pipes, services.
+Each Angular application has at least one root module (AppModule).
+Modules also define what parts are exposed (exports) and what they depend on (imports).
+
+
+
+
+11. What is Directive
+
+A directive is a class with special behavior that can change DOM, attributes, or structure.
+Types: structural (e.g. *ngIf, *ngFor) change DOM layout, attribute (e.g. [ngClass]) change appearance or behavior.
+You can also make custom directives to reuse behavior.
+
+
+
+
+12. What is Pipe
+
+A pipe is a transform function used in templates to format data.
+Example pipes: date, uppercase, currency.
+You can create custom pipes to transform values in template (e.g. myCustomPipe).
+
+
+
+
+13. What is Routing
+
+Routing is Angular’s way to navigate between different views (components) based on URL path.
+You configure routes in RouterModule with path and component or loadChildren.
+When URL changes, Angular loads the matched component into a <router-outlet>.
+
+
+
+
+14. What is Guards
+
+Guards are interfaces you implement to control route navigation.
+Examples: CanActivate, CanDeactivate, CanLoad, CanActivateChild.
+They allow or prevent routing based on logic (e.g. authentication, unsaved changes).
+
+
+
+15. Lazy Loading in Angular
+
+Lazy loading loads modules (or components) only when user navigates to route needing them, not at startup.
+It reduces the initial bundle size and speeds up first load.
+You use loadChildren in route config or import() dynamic loading.
+
+
+
+16. What is Interpolation
+
+Interpolation uses {{ … }} syntax in template to bind and display component’s variables.
+Example: <h1>{{ title }}</h1>.
+It is one-way binding from component to view.
+
+
+
+17. What is Property Binding
+
+Property binding binds a component property to an HTML element’s property.
+Syntax: [src]="imgUrl", [disabled]="isDisabled".
+It updates the view when component value changes.
+
+
+
+18. What is Event Binding
+
+Event binding reacts to user actions like clicks, input, etc.
+Syntax: (click)="onClick()", (keyup)="onKey()".
+It lets the view notify the component to run methods.
+
+
+
+19. What is Two-Way Binding
+
+Two-way binding allows sync between component and view in both directions.
+Syntax: [(ngModel)]="name".
+When user changes input, component value updates; when component changes, view updates.
+
+
+
+20. What is Service
+
+A service is a class that holds logic or data not tied to UI (e.g. API calls, data store).
+You inject services into components or other services via dependency injection.
+It promotes code reuse and separation of concerns.
+
+
+
+21. What is HTTP Interceptor?
+
+An interceptor is a class that intercepts HTTP requests/responses globally.
+You can modify request (e.g. add auth header) or handle errors in one place.
+You register interceptors in providers using HTTP_INTERCEPTORS.
+
+
+
+22. How to pass headers in Angular services?
+
+Use HttpHeaders and pass in HTTP options.
+Example:
+const headers = new HttpHeaders({ 'Authorization': 'token', 'Content-Type': 'application/json' });  
+this.http.get(url, { headers: headers });
+
+You can also chain .set() methods to modify headers.
+
+
+
+23. What is Forms in Angular
+
+Forms provide ways to capture user input and validate it.
+Angular defines form models and validation rules through template-driven or reactive forms.
+They help handling input, validation, error display, submission.
+
+
+
+24. What is TDF (Template-Driven Form)
+
+Template-driven form is a simpler form approach using directives in template (e.g. ngModel, ngForm).
+You define form structure in HTML and Angular infers the rest.
+Good for simple or small forms; less scalable for complex business logic.
+
+
+
+25. Explain Reactive Forms
+
+Reactive forms define the form model in component class using FormControl, FormGroup, FormArray.
+You have full programmatic control, easier unit testing, and dynamic validation.
+Better for large or complex forms.
+
+
+
+26. Explain FormGroup, FormControl and FormArray
+
+FormControl represents a single input field (value + validation).
+FormGroup groups multiple FormControls into one object tree (e.g. an entire form).
+FormArray is an array of FormControl or FormGroup to manage dynamic collections (e.g. list of addresses).
+
+
+
+27. What is FormBuilder
+
+FormBuilder is a convenience service to more easily create FormGroup and FormControl instances.
+You call this.fb.group({...}) instead of manually instantiating controls.
+It helps reduce boilerplate code.
+
+
+
+28. What are Validators?
+
+Validators are functions that check whether control’s value is valid or not (e.g. required, minLength, custom).
+If valid, they return null; if not, they return an error object { errorName: true }.
+You can use built-in or custom validators.
+
+
+
+29. What is Typed Forms?
+
+Typed forms ensure form values have correct TypeScript types.
+They improve type safety and prevent mistakes (you know the shape of form.value).
+Angular supports typed forms from version 14+.
+
+
+
+30. How to take the disabled control value in reactive forms
+
+By default, disabled controls are excluded from form.value.
+To get disabled values too, use form.getRawValue().
+getRawValue() returns values including disabled controls.
+
+
+
+31. State Management in Angular
+
+State management handles shared data and its flow in the app (e.g. user info, cart).
+You can use services with BehaviorSubject, or libraries like NgRx, Akita, NGXS.
+It helps to centralize state, make changes predictable, and avoid prop drilling.
+
+
+
+32. How to pass data from one component to another?
+
+Parent → Child: using @Input() property.
+Child → Parent: using @Output() event emitter.
+Sibling or distant components: via shared service or state management.
+
+
+
+33. What is Signals in Angular
+
+Signals are a new reactivity primitive (introduced around Angular 16/17) for fine-grained updates.
+They hold a value and notify dependents when the value changes.
+They simplify reactive updates without always needing Observables.
+
+
+
+34. How to convert signal to observable?
+
+You can wrap a signal into an Observable using utilities or toObservable() (or similar conversions).
+This allows integrating signals with RxJS pipeline.
+(Implementation may depend on Angular version and support.)
+
+
+
+35. What is Deferable View
+
+In Angular 17, deferrable views (via @defer block) allow parts of template to load later.
+This reduces initial bundle size and speeds up first render. 
+You wrap content inside @defer { … } and it loads when condition is met or later.
+
+
+
+36. What is Control Flow Template
+
+Angular 17 introduces a new control flow syntax (@if, @for, @switch) in templates. 
+It replaces *ngIf, *ngFor, *ngSwitch with more declarative syntax.
+It enhances readability, performance, and type safety in templates.
+
+
+
+37. What is Server Side Rendering (SSR)
+
+SSR means rendering the app’s HTML on the server first, then client takes over.
+It improves SEO, faster first content paint, better performance for initial load.
+Angular uses Angular Universal to support SSR.
+
+
+
+38. What is Standalone Template
+
+This likely refers to using standalone components and templates without modules.
+In standalone setup, you define components directly with standalone: true, and templates don’t need NgModule.
+This reduces boilerplate and improves modularity.
+
+
+
+39. Why app.config in Angular
+
+app.config is a pattern or configuration file to centralize configuration settings (URLs, API keys, feature flags).
+You inject or import app.config to use configuration across modules or services.
+It helps avoid scattering constants and magic values everywhere.
+
+
+
+40. What is Material UI
+
+Angular Material (Material UI) is a component library implementing Google’s Material Design for Angular.
+Provides ready UI components like buttons, cards, dialogs, tables, form controls.
+Using it speeds UI development and gives consistent look & feel.
+
+
+
+41. How to use services & interceptors in standalone template
+
+In standalone component, include providers in the component’s metadata:
+@Component({ standalone: true, providers: [MyService, { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true }] })
+
+Then you can inject the service or interceptor in that standalone component directly.
+
+
+
+42. Explain RxJS in Angular
+
+RxJS is a library for reactive programming using Observables, streams, and operators.
+Angular uses RxJS heavily: for HTTP, events, forms, asynchronous operations.
+RxJS gives you tools like map, filter, switchMap, catchError, etc.
+
+
+
+43. What is Observable?
+
+Observable is a stream of data that can emit multiple values over time.
+You subscribe to it to receive data, and you can unsubscribe.
+Used for HTTP calls, event streams, etc.
+
+
+
+44. What is NgRx?
+
+NgRx is a state management library based on Redux pattern for Angular.
+It uses Store (state), Actions, Reducers, Effects to manage state flow.
+NgRx helps in large apps to keep state predictable and maintainable.
+
+
+
+45. How to use NgRx in standalone template
+
+You import NgRx store modules into your standalone component via imports array.
+You provide store, effects, etc., similar as in modules.
+Then you can dispatch actions and select state inside your standalone components.
+
+
+
+46. What is Provider in Angular
+
+Provider tells Angular how to create (or get) a service or token.
+It can be class provider, value provider, factory provider, etc.
+You register providers in module, component, or using providedIn in @Injectable.
+
+
+
+47. What is the use of --no-standalone keyword?
+
+When generating new components (using CLI), --no-standalone forces the component to be declared in a module (not standalone).
+So it will generate component inside NgModule declarations.
+Useful if you prefer old module-based style instead of standalone.
+
+
+
+48. How to deploy Angular application?
+
+Build your app for production: ng build --prod (or ng build).
+Upload the built dist/ folder to a web server, hosting service, or static hosting (e.g. Firebase hosting, Netlify, AWS S3).
+Ensure server is configured to redirect all routes to index.html (for SPA routing).
+
+
+
+49. How to upgrade Angular?
+
+Use Angular CLI command: ng update @angular/cli @angular/core.
+This updates dependencies, migrations, and config automatically.
+Test your app after upgrade to catch breaking changes.
+
+
+
+50. Difference between Subject & BehaviorSubject
+
+Subject emits values only to subscribers that subscribe after emission (it does not replay past).
+BehaviorSubject stores the latest value and emits immediately to new subscribers.
+So BehaviorSubject always has an initial value and gives value on subscription.
+
+
+
+*/
+
+
+
+
+
+//===================================================================================================================
+//===================================================================================================================
+
+
 
 🟢 Basic Level (30+)
 =====================
@@ -606,524 +1134,3 @@ Use AOT, enable optimization, lazy load modules, secure with sanitization, cache
 
 
 
-//=================================================================================================================================================================================================================//=================================================================================================================================================================================================================
-
-
-/*
-
- ***Angular***
- ==============
-
-
-1. What is Angular?
-
-Angular is a web application framework built by Google.
-It allows you to build Single Page Applications (SPAs) using TypeScript, components, services, etc.
-It handles data binding, dependency injection, routing, and more, so you don’t reinvent common tasks.
-
-
-
-
-2. What is Angular CLI?
-
-Angular CLI is a command-line tool to help create and manage Angular projects.
-You use commands like ng new, ng serve, ng generate component, ng build.
-It sets up boilerplate, configuration, and build pipeline for you.
-
-
-
-
-3. Advantages of Angular
-
-Structured & opinionated framework — gives you clear ways to build apps.
-Two-way data binding, dependency injection, modular architecture speed up development.
-Strong community, tooling (CLI, testing), and maintainability for large apps.
-
-4. Hooks in Angular
-
-Lifecycle hooks are special methods that Angular calls at specific times in the life of a component or directive.
-They let you run custom logic when a component is created, updated, or destroyed.
-
-1. ngOnChanges(changes: SimpleChanges)
-
-When it runs: Called before ngOnInit and whenever an @Input() property value changes.
-Use case: React when parent sends new data to child.
-Example:
-
-ngOnChanges(changes: SimpleChanges) {
-  console.log('Input property changed:', changes);
-}
-
-
-2. ngOnInit()
-
-When it runs: Once after first ngOnChanges. Called only once in component’s life.
-Use case: Initialize data, call APIs, set up values.
-Example:
-
-ngOnInit() {
-  console.log('Component initialized');
-}
-
-
-3. ngDoCheck()
-
-When it runs: Every change detection cycle. Runs often, more than ngOnChanges.
-Use case: Detect and act on changes that Angular doesn’t catch with @Input().
-Example:
-
-ngDoCheck() {
-  console.log('Change detection cycle running');
-}
-
-4. ngAfterContentInit()
-
-When it runs: Called once after Angular inserts external content (<ng-content>) into component.
-Use case: Run logic after projected content is ready.
-Example:
-
-ngAfterContentInit() {
-  console.log('ng-content projected');
-}
-
-
-5. ngAfterContentChecked()
-
-When it runs: After every change detection cycle on projected content.
-Use case: Respond to updates in projected content.
-Example:
-
-ngAfterContentChecked() {
-  console.log('Projected content checked');
-}
-
-
-6. ngAfterViewInit()
-
-When it runs: Called once after component’s view (child components & template) is initialized.
-Use case: Access @ViewChild() or DOM elements safely.
-Example:
-
-ngAfterViewInit() {
-  console.log('Component view initialized');
-}
-
-
-7. ngAfterViewChecked()
-
-When it runs: After every change detection cycle of the component’s view.
-Use case: Respond when view updates (but avoid performance-heavy logic here).
-Example:
-
-ngAfterViewChecked() {
-  console.log('Component view checked');
-}
-
-
-8. ngOnDestroy()
-
-When it runs: Just before Angular destroys the component.
-Use case: Clean up subscriptions, intervals, or event listeners to avoid memory leaks.
-Example:
-
-ngOnDestroy() {
-  console.log('Component destroyed');
-}
-
-Full Lifecycle Flow Order :
-When a component is created → destroyed, hooks fire in this order:
-ngOnChanges (when @Input changes)
-ngOnInit (once)
-ngDoCheck (every change detection)
-ngAfterContentInit (once)
-ngAfterContentChecked (after every content check)
-ngAfterViewInit (once)
-ngAfterViewChecked (after every view check)
-ngOnDestroy (before component removed)
-
-
-Init hooks: ngOnInit, ngAfterContentInit, ngAfterViewInit
-Check hooks: ngDoCheck, ngAfterContentChecked, ngAfterViewChecked
-Destroy hook: ngOnDestroy
-
-
-
-5. What is the latest version of Angular?
-
-As of now, the latest stable Angular version is Angular 20 (released May 2025) 
-Prior versions include v19, v18, etc. 
-You can check using ng version or look at the Angular releases page.
-
-
-
-6. New Features in Angular 17
-
-Introduces control flow syntax in templates (@if, @for, @switch) to simplify template logic 
-Adds deferrable views (@defer blocks) to defer loading of parts of template to reduce bundle size 
-Improvements in SSR/hydration, better performance, and tighter integration of new features like signals 
-
-
-
-7. Difference between ng serve & ng start
-
-Actually, ng start is not a standard Angular CLI command (typo/mistake); the correct commands are ng serve and ng start may be alias in some setups.
-ng serve compiles the app in memory and serves it locally (development server).
-If ng start exists in some projects, it generally is alias or wrapper for ng serve (via npm scripts).
-
-
-
-
-8. What is a Component in Angular & its types
-
-A component is a building block of an Angular app, composed of HTML, TypeScript logic, and CSS.
-It encapsulates view, behavior, and data for a part of UI (for example, a button, form, list).
-Types: standalone component, routed component, dumb/presentational, container/smart components, etc.
-
-
-
-9. What is Standalone Component
-
-Standalone components don’t need to be declared inside an NgModule.
-You use @Component({ standalone: true, ... }).
-They simplify module structure and reduce boilerplate.
-
-
-
-
-10. What is Module (NgModule)
-
-A module groups related parts of the app: components, directives, pipes, services.
-Each Angular application has at least one root module (AppModule).
-Modules also define what parts are exposed (exports) and what they depend on (imports).
-
-
-
-
-11. What is Directive
-
-A directive is a class with special behavior that can change DOM, attributes, or structure.
-Types: structural (e.g. *ngIf, *ngFor) change DOM layout, attribute (e.g. [ngClass]) change appearance or behavior.
-You can also make custom directives to reuse behavior.
-
-
-
-
-12. What is Pipe
-
-A pipe is a transform function used in templates to format data.
-Example pipes: date, uppercase, currency.
-You can create custom pipes to transform values in template (e.g. myCustomPipe).
-
-
-
-
-13. What is Routing
-
-Routing is Angular’s way to navigate between different views (components) based on URL path.
-You configure routes in RouterModule with path and component or loadChildren.
-When URL changes, Angular loads the matched component into a <router-outlet>.
-
-
-
-
-14. What is Guards
-
-Guards are interfaces you implement to control route navigation.
-Examples: CanActivate, CanDeactivate, CanLoad, CanActivateChild.
-They allow or prevent routing based on logic (e.g. authentication, unsaved changes).
-
-
-
-15. Lazy Loading in Angular
-
-Lazy loading loads modules (or components) only when user navigates to route needing them, not at startup.
-It reduces the initial bundle size and speeds up first load.
-You use loadChildren in route config or import() dynamic loading.
-
-
-
-16. What is Interpolation
-
-Interpolation uses {{ … }} syntax in template to bind and display component’s variables.
-Example: <h1>{{ title }}</h1>.
-It is one-way binding from component to view.
-
-
-
-17. What is Property Binding
-
-Property binding binds a component property to an HTML element’s property.
-Syntax: [src]="imgUrl", [disabled]="isDisabled".
-It updates the view when component value changes.
-
-
-
-18. What is Event Binding
-
-Event binding reacts to user actions like clicks, input, etc.
-Syntax: (click)="onClick()", (keyup)="onKey()".
-It lets the view notify the component to run methods.
-
-
-
-19. What is Two-Way Binding
-
-Two-way binding allows sync between component and view in both directions.
-Syntax: [(ngModel)]="name".
-When user changes input, component value updates; when component changes, view updates.
-
-
-
-20. What is Service
-
-A service is a class that holds logic or data not tied to UI (e.g. API calls, data store).
-You inject services into components or other services via dependency injection.
-It promotes code reuse and separation of concerns.
-
-
-
-21. What is HTTP Interceptor?
-
-An interceptor is a class that intercepts HTTP requests/responses globally.
-You can modify request (e.g. add auth header) or handle errors in one place.
-You register interceptors in providers using HTTP_INTERCEPTORS.
-
-
-
-22. How to pass headers in Angular services?
-
-Use HttpHeaders and pass in HTTP options.
-Example:
-const headers = new HttpHeaders({ 'Authorization': 'token', 'Content-Type': 'application/json' });  
-this.http.get(url, { headers: headers });
-
-You can also chain .set() methods to modify headers.
-
-
-
-23. What is Forms in Angular
-
-Forms provide ways to capture user input and validate it.
-Angular defines form models and validation rules through template-driven or reactive forms.
-They help handling input, validation, error display, submission.
-
-
-
-24. What is TDF (Template-Driven Form)
-
-Template-driven form is a simpler form approach using directives in template (e.g. ngModel, ngForm).
-You define form structure in HTML and Angular infers the rest.
-Good for simple or small forms; less scalable for complex business logic.
-
-
-
-25. Explain Reactive Forms
-
-Reactive forms define the form model in component class using FormControl, FormGroup, FormArray.
-You have full programmatic control, easier unit testing, and dynamic validation.
-Better for large or complex forms.
-
-
-
-26. Explain FormGroup, FormControl and FormArray
-
-FormControl represents a single input field (value + validation).
-FormGroup groups multiple FormControls into one object tree (e.g. an entire form).
-FormArray is an array of FormControl or FormGroup to manage dynamic collections (e.g. list of addresses).
-
-
-
-27. What is FormBuilder
-
-FormBuilder is a convenience service to more easily create FormGroup and FormControl instances.
-You call this.fb.group({...}) instead of manually instantiating controls.
-It helps reduce boilerplate code.
-
-
-
-28. What are Validators?
-
-Validators are functions that check whether control’s value is valid or not (e.g. required, minLength, custom).
-If valid, they return null; if not, they return an error object { errorName: true }.
-You can use built-in or custom validators.
-
-
-
-29. What is Typed Forms?
-
-Typed forms ensure form values have correct TypeScript types.
-They improve type safety and prevent mistakes (you know the shape of form.value).
-Angular supports typed forms from version 14+.
-
-
-
-30. How to take the disabled control value in reactive forms
-
-By default, disabled controls are excluded from form.value.
-To get disabled values too, use form.getRawValue().
-getRawValue() returns values including disabled controls.
-
-
-
-31. State Management in Angular
-
-State management handles shared data and its flow in the app (e.g. user info, cart).
-You can use services with BehaviorSubject, or libraries like NgRx, Akita, NGXS.
-It helps to centralize state, make changes predictable, and avoid prop drilling.
-
-
-
-32. How to pass data from one component to another?
-
-Parent → Child: using @Input() property.
-Child → Parent: using @Output() event emitter.
-Sibling or distant components: via shared service or state management.
-
-
-
-33. What is Signals in Angular
-
-Signals are a new reactivity primitive (introduced around Angular 16/17) for fine-grained updates.
-They hold a value and notify dependents when the value changes.
-They simplify reactive updates without always needing Observables.
-
-
-
-34. How to convert signal to observable?
-
-You can wrap a signal into an Observable using utilities or toObservable() (or similar conversions).
-This allows integrating signals with RxJS pipeline.
-(Implementation may depend on Angular version and support.)
-
-
-
-35. What is Deferable View
-
-In Angular 17, deferrable views (via @defer block) allow parts of template to load later.
-This reduces initial bundle size and speeds up first render. 
-You wrap content inside @defer { … } and it loads when condition is met or later.
-
-
-
-36. What is Control Flow Template
-
-Angular 17 introduces a new control flow syntax (@if, @for, @switch) in templates. 
-It replaces *ngIf, *ngFor, *ngSwitch with more declarative syntax.
-It enhances readability, performance, and type safety in templates.
-
-
-
-37. What is Server Side Rendering (SSR)
-
-SSR means rendering the app’s HTML on the server first, then client takes over.
-It improves SEO, faster first content paint, better performance for initial load.
-Angular uses Angular Universal to support SSR.
-
-
-
-38. What is Standalone Template
-
-This likely refers to using standalone components and templates without modules.
-In standalone setup, you define components directly with standalone: true, and templates don’t need NgModule.
-This reduces boilerplate and improves modularity.
-
-
-
-39. Why app.config in Angular
-
-app.config is a pattern or configuration file to centralize configuration settings (URLs, API keys, feature flags).
-You inject or import app.config to use configuration across modules or services.
-It helps avoid scattering constants and magic values everywhere.
-
-
-
-40. What is Material UI
-
-Angular Material (Material UI) is a component library implementing Google’s Material Design for Angular.
-Provides ready UI components like buttons, cards, dialogs, tables, form controls.
-Using it speeds UI development and gives consistent look & feel.
-
-
-
-41. How to use services & interceptors in standalone template
-
-In standalone component, include providers in the component’s metadata:
-@Component({ standalone: true, providers: [MyService, { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true }] })
-
-Then you can inject the service or interceptor in that standalone component directly.
-
-
-
-42. Explain RxJS in Angular
-
-RxJS is a library for reactive programming using Observables, streams, and operators.
-Angular uses RxJS heavily: for HTTP, events, forms, asynchronous operations.
-RxJS gives you tools like map, filter, switchMap, catchError, etc.
-
-
-
-43. What is Observable?
-
-Observable is a stream of data that can emit multiple values over time.
-You subscribe to it to receive data, and you can unsubscribe.
-Used for HTTP calls, event streams, etc.
-
-
-
-44. What is NgRx?
-
-NgRx is a state management library based on Redux pattern for Angular.
-It uses Store (state), Actions, Reducers, Effects to manage state flow.
-NgRx helps in large apps to keep state predictable and maintainable.
-
-
-
-45. How to use NgRx in standalone template
-
-You import NgRx store modules into your standalone component via imports array.
-You provide store, effects, etc., similar as in modules.
-Then you can dispatch actions and select state inside your standalone components.
-
-
-
-46. What is Provider in Angular
-
-Provider tells Angular how to create (or get) a service or token.
-It can be class provider, value provider, factory provider, etc.
-You register providers in module, component, or using providedIn in @Injectable.
-
-
-
-47. What is the use of --no-standalone keyword?
-
-When generating new components (using CLI), --no-standalone forces the component to be declared in a module (not standalone).
-So it will generate component inside NgModule declarations.
-Useful if you prefer old module-based style instead of standalone.
-
-
-
-48. How to deploy Angular application?
-
-Build your app for production: ng build --prod (or ng build).
-Upload the built dist/ folder to a web server, hosting service, or static hosting (e.g. Firebase hosting, Netlify, AWS S3).
-Ensure server is configured to redirect all routes to index.html (for SPA routing).
-
-
-
-49. How to upgrade Angular?
-
-Use Angular CLI command: ng update @angular/cli @angular/core.
-This updates dependencies, migrations, and config automatically.
-Test your app after upgrade to catch breaking changes.
-
-
-
-50. Difference between Subject & BehaviorSubject
-
-Subject emits values only to subscribers that subscribe after emission (it does not replay past).
-BehaviorSubject stores the latest value and emits immediately to new subscribers.
-So BehaviorSubject always has an initial value and gives value on subscription.
-
-
-
-*/
